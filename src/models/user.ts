@@ -1,9 +1,19 @@
-import client from "../database";
+import client from "../database"
+import bcrypt from 'bcrypt'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const {
+    SALT_ROUNDS,
+    PEPPER
+} = process.env
 
 export type User = {
     id: Number;
     firstName: string;
     lastName: string;
+    password: string;
     password_digest: string;
 }
 
@@ -14,8 +24,9 @@ export class UserStore {
         try {
             //@ts-ignore
             const sql = 'INSERT INTO users (id, firstName, lastName, password_digest) VALUES($1, $2, $3, $4) RETURNING *'
+            const password_digest = bcrypt.hashSync(u.password + PEPPER, parseInt(SALT_ROUNDS));
             const conn = await client.connect()
-            const result = await conn.query(sql, [u.id, u.firstName, u.lastName, u.password_digest])
+            const result = await conn.query(sql, [u.id, u.firstName, u.lastName, password_digest])
             const user = result.rows[0]
             conn.release()
             return user
@@ -55,8 +66,9 @@ export class UserStore {
         try {
             //@ts-ignore
             const sql = 'UPDATE users SET (firstName, lastName, password_digest) = ROW($2, $3, $4) WHERE id=($1) RETURNING *'
+            const password_digest = bcrypt.hashSync(u.password + PEPPER, parseInt(SALT_ROUNDS));
             const conn = await client.connect()
-            const result = await conn.query(sql, [u.id, u.firstName, u.lastName, u.password_digest])
+            const result = await conn.query(sql, [u.id, u.firstName, u.lastName, password_digest])
             const user = result.rows[0]
             conn.release()
             return user
@@ -64,7 +76,7 @@ export class UserStore {
             throw new Error(`Could not update user ${u.firstName}. Error: ${err}.`)
         }
     }
-    // DELETE
+    // DELETE - does not work if user has any orders associated
     async delete(id: string): Promise<User> {
         try {
             //@ts-ignore
