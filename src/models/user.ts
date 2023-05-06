@@ -37,7 +37,7 @@ export class UserStore {
             throw new Error(`Could not index users. Error: ${err}.`)
         }
     }
-    async show(id: Number): Promise<User> {
+    async show(id: string): Promise<User> {
         try {
             //@ts-ignore
             const sql = 'SELECT * FROM users WHERE id=($1)'
@@ -54,7 +54,7 @@ export class UserStore {
     async update(u: User): Promise<User> {
         try {
             //@ts-ignore
-            const sql = 'UPDATE users SET (firstName, lastName, category) = VALUES($2, $3, $4) RETURNING * WHERE id=($1)'
+            const sql = 'UPDATE users SET (firstName, lastName, password_digest) = ROW($2, $3, $4) WHERE id=($1) RETURNING *'
             const conn = await client.connect()
             const result = await conn.query(sql, [u.id, u.firstName, u.lastName, u.password_digest])
             const user = result.rows[0]
@@ -65,7 +65,7 @@ export class UserStore {
         }
     }
     // DELETE
-    async delete(id: Number): Promise<User> {
+    async delete(id: string): Promise<User> {
         try {
             //@ts-ignore
             const sql = 'DELETE FROM users WHERE id=($1)'

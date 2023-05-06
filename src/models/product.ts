@@ -37,7 +37,7 @@ export class ProductStore {
             throw new Error(`Could not index products. Error: ${err}.`)
         }
     }
-    async show(id: Number): Promise<Product> {
+    async show(id: string): Promise<Product> {
         try {
             //@ts-ignore
             const sql = 'SELECT * FROM products WHERE id=($1)'
@@ -54,7 +54,7 @@ export class ProductStore {
     async update(p: Product): Promise<Product> {
         try {
             //@ts-ignore
-            const sql = 'UPDATE products SET (name, price, category) = VALUES($2, $3, $4) RETURNING * WHERE id=($1)'
+            const sql = 'UPDATE products SET (name, price, category) = ROW($2, $3, $4) WHERE id=($1) RETURNING *'
             const conn = await client.connect()
             const result = await conn.query(sql, [p.id, p.name, p.price, p.category])
             const product = result.rows[0]
@@ -65,7 +65,7 @@ export class ProductStore {
         }
     }
     // DELETE
-    async delete(id: Number): Promise<Product> {
+    async delete(id: string): Promise<Product> {
         try {
             //@ts-ignore
             const sql = 'DELETE FROM products WHERE id=($1)'

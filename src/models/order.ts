@@ -36,7 +36,7 @@ export class OrderStore {
             throw new Error(`Could not index orders. Error: ${err}.`)
         }
     }
-    async show(id: Number): Promise<Order> {
+    async show(id: string): Promise<Order> {
         try {
             //@ts-ignore
             const sql = 'SELECT * FROM orders WHERE id=($1)'
@@ -49,11 +49,11 @@ export class OrderStore {
             throw new Error(`Could not show order ${id}. Error: ${err}.`)
         }
     }
-    // UPDATE
+    // UPDAT
     async update(o: Order): Promise<Order> {
         try {
             //@ts-ignore
-            const sql = 'UPDATE orders SET (user_id, status, category) = VALUES($2, $3) RETURNING * WHERE id=($1)'
+            const sql = 'UPDATE orders SET (user_id, status) = ((SELECT id FROM users WHERE user_id = $2 LIMIT 1), $3) WHERE id=($1) RETURNING *'
             const conn = await client.connect()
             const result = await conn.query(sql, [o.id, o.user_id, o.status])
             const order = result.rows[0]
@@ -64,7 +64,7 @@ export class OrderStore {
         }
     }
     // DELETE
-    async delete(id: Number): Promise<Order> {
+    async delete(id: string): Promise<Order> {
         try {
             //@ts-ignore
             const sql = 'DELETE FROM orders WHERE id=($1)'
