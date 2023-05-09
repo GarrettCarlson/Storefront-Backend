@@ -49,7 +49,7 @@ export class OrderStore {
             throw new Error(`Could not show order ${id}. Error: ${err}.`)
         }
     }
-    // UPDAT
+    // UPDATE
     async update(o: Order): Promise<Order> {
         try {
             //@ts-ignore

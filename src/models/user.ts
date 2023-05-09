@@ -1,8 +1,5 @@
 import client from "../database"
 import bcrypt from 'bcrypt'
-import dotenv from 'dotenv'
-
-dotenv.config()
 
 const {
     SALT_ROUNDS,
