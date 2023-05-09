@@ -1,12 +1,12 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, RequestHandler } from 'express';
 import { Product, ProductStore } from '../models/product';
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 
-const TOKEN_SECRET = process.env.TOKEN_SECRET;
+const TOKEN_SECRET: Secret = process.env.TOKEN_SECRET || '';
 const store = new ProductStore();
 
 // JWT Authentication Middleware
-const verifyAuthToken = async (req: Request, res: Response, next) => {
+const verifyAuthToken: RequestHandler  = async (req: Request, res: Response, next) => {
   try {
     const authorizationHeader = req.headers.authorization;
     if (!authorizationHeader) {

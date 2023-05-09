@@ -1,7 +1,15 @@
 import client from '../database';
 import bcrypt from 'bcrypt';
 
-const { SALT_ROUNDS, PEPPER } = process.env;
+if (process.env.SALT_ROUNDS === undefined) {
+  throw new Error('Missing environment variable: SALT_ROUNDS');
+}
+if (process.env.PEPPER === undefined) {
+  throw new Error('Missing environment variable: PEPPER');
+}
+
+const SALT_ROUNDS = process.env.SALT_ROUNDS as string;
+const PEPPER = process.env.PEPPER as string;
 
 export type User = {
   id: Number;
