@@ -54,6 +54,16 @@ const show = async (req: Request, res: Response) => {
   }
 };
 
+const showbyUserId = async (req: Request, res: Response) => {
+  try {
+    const order = await store.showByUserId(req.params.user_id);
+    res.json(order);
+  } catch (err) {
+    res.status(400);
+    res.json(`Error showing orders for user ${req.params.user_id}: ${err}`);
+  }
+};
+
 // Update - REQUIRES TOKEN
 const update = async (req: Request, res: Response) => {
   try {
@@ -78,11 +88,12 @@ const remove = async (req: Request, res: Response) => {
 
 // Build & Export routes
 const order_routes = (app: express.Application) => {
-  app.post('/orders', verifyAuthToken, create);
-  app.get('/orders', verifyAuthToken, index);
-  app.get('/orders/:id', verifyAuthToken, show);
-  app.put('/orders/:id', verifyAuthToken, update);
-  app.delete('/orders/:id', verifyAuthToken, remove);
+  // app.post('/orders', verifyAuthToken, create);
+  // app.get('/orders', verifyAuthToken, index);
+  // app.get('/orders/:id', verifyAuthToken, show);
+  // app.put('/orders/:id', verifyAuthToken, update);
+  // app.delete('/orders/:id', verifyAuthToken, remove);
+  app.get('/orders/:user_id', verifyAuthToken, showbyUserId);
 };
 
 export default order_routes;

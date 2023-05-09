@@ -50,6 +50,19 @@ export class OrderStore {
       throw new Error(`Could not show order ${id}. Error: ${err}.`);
     }
   }
+  async showByUserId(user_id: string): Promise<Order[]> {
+    try {
+      //@ts-ignore
+      const sql = 'SELECT * FROM orders WHERE user_id=($1)';
+      const conn = await client.connect();
+      const result = await conn.query(sql, [user_id]);
+      const order = result.rows;
+      conn.release();
+      return order;
+    } catch (err) {
+      throw new Error(`Could not show order ${user_id}. Error: ${err}.`);
+    }
+  }
   // UPDATE
   async update(o: Order): Promise<Order> {
     try {
