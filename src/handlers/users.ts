@@ -6,7 +6,11 @@ const TOKEN_SECRET: Secret = process.env.TOKEN_SECRET || '';
 const store = new UserStore();
 
 // JWT Authentication Middleware
-const verifyAuthToken: RequestHandler = async (req: Request, res: Response, next) => {
+const verifyAuthToken: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next
+) => {
   try {
     const authorizationHeader = req.headers.authorization;
     if (!authorizationHeader) {
