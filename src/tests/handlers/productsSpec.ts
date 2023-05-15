@@ -1,8 +1,8 @@
 import supertest from 'supertest';
 import app from '../../server';
 import jwt, { Secret } from 'jsonwebtoken';
-import test from '../../database.json';
 import * as dbMigrate from 'db-migrate';
+import { Product } from '../../models/product'
 
 // Generate a JWT for endpoints requiring authentication
 const TOKEN_SECRET: Secret = process.env.TOKEN_SECRET || '';
@@ -14,7 +14,7 @@ const testUser = {
     'gaeorigjeorigjsroitgjoairjgoiaqwjrogijaerlotibghjsertrgasd...sdf.gs54587656',
 };
 
-const token = jwt.sign(testUser, TOKEN_SECRET);
+const testToken = jwt.sign(testUser, TOKEN_SECRET);
 
 const request = supertest(app);
 describe('GET /products', () => {
@@ -22,7 +22,7 @@ describe('GET /products', () => {
   beforeAll(async () => {
     // run the test db up migration
     const dbm = dbMigrate.getInstance(true);
-    dbm.up('products');
+    dbm.up();
   });
 
   afterAll(async () => {
@@ -40,30 +40,50 @@ describe('GET /products', () => {
   });
 
   it('should return a single product with the correct product_id', (done: DoneFn) => {
+    const testProduct = {
+      id: 1,
+      name: 'Product_1',
+      price: 1.1,
+      category: 'General'
+    }
     request.get('/products/1').end((err, res) => {
       expect(res.status).toBe(200);
-      expect(res.body).toEqual(jasmine.any(Array));
-      expect(res.body.length).toBe(1);
+      expect(res.body).toEqual(testProduct);
       done();
     });
   });
 });
 
 describe('POST /products', () => {
+  // migrate the db down then up to set the database state
+  beforeAll(async () => {
+    // run the test db up migration
+    const dbm = dbMigrate.getInstance(true);
+    dbm.reset();
+    dbm.up();
+  });
+
+  afterAll(async () => {
+    // reset the db
+    const dbm = dbMigrate.getInstance(true);
+    dbm.reset();
+  });
+
   it('should create a new product with the given input data', async () => {
-    const newProduct = {
+    const testProduct: Product = {
       id: 999,
       name: 'Product_999',
       price: 998,
-      category: 'General 9',
+      category: 'Very Special',
     };
-    const payload = {
-      newProduct,
-      token,
-    };
-    const res = await request.post('/products').send(payload);
 
-    expect(res.status).toBe(201);
-    expect(res.body).toEqual(newProduct);
+    const payload = {
+      product: testProduct
+    }
+
+    const res = await request.post('/products').set('Authorization', `Bearer ${testToken}`).send(payload);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(testProduct);
   });
 });
