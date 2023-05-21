@@ -2,7 +2,6 @@ import supertest from 'supertest';
 import app from '../../server';
 import jwt, { Secret } from 'jsonwebtoken';
 import * as dbMigrate from 'db-migrate';
-import { Product } from '../../models/product'
 
 // Generate a JWT for endpoints requiring authentication
 const TOKEN_SECRET: Secret = process.env.TOKEN_SECRET || '';
@@ -15,19 +14,21 @@ const testUser = {
 };
 
 const testToken = jwt.sign(testUser, TOKEN_SECRET);
-
 const request = supertest(app);
+
 describe('GET /products', () => {
   // migrate the db down then up to set the database state
   beforeAll(async () => {
     // run the test db up migration
     const dbm = dbMigrate.getInstance(true);
+    dbm.silence(true);
     dbm.up();
   });
 
   afterAll(async () => {
     // reset the db
     const dbm = dbMigrate.getInstance(true);
+    dbm.silence(true);
     dbm.reset();
   });
 
@@ -39,18 +40,16 @@ describe('GET /products', () => {
     });
   });
 
-  it('should return a single product with the correct product_id', (done: DoneFn) => {
+  it('should return a single product with the correct product_id', async () => {
     const testProduct = {
       id: 1,
       name: 'Product_1',
       price: 1.1,
-      category: 'General'
-    }
-    request.get('/products/1').end((err, res) => {
-      expect(res.status).toBe(200);
-      expect(res.body).toEqual(testProduct);
-      done();
-    });
+      category: 'General',
+    };
+    const res = await request.get('/products/1');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(testProduct);
   });
 });
 
@@ -59,18 +58,19 @@ describe('POST /products', () => {
   beforeAll(async () => {
     // run the test db up migration
     const dbm = dbMigrate.getInstance(true);
-    dbm.reset();
+    dbm.silence(true);
     dbm.up();
   });
 
   afterAll(async () => {
     // reset the db
     const dbm = dbMigrate.getInstance(true);
+    dbm.silence(true);
     dbm.reset();
   });
 
   it('should create a new product with the given input data', async () => {
-    const testProduct: Product = {
+    const testProduct = {
       id: 999,
       name: 'Product_999',
       price: 998,
@@ -78,10 +78,13 @@ describe('POST /products', () => {
     };
 
     const payload = {
-      product: testProduct
-    }
+      product: testProduct,
+    };
 
-    const res = await request.post('/products').set('Authorization', `Bearer ${testToken}`).send(payload);
+    const res = await request
+      .post('/products')
+      .set('Authorization', `Bearer ${testToken}`)
+      .send(payload);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(testProduct);

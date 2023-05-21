@@ -4,7 +4,7 @@ CREATE TABLE users (
     lastName VARCHAR(100),
     password_digest VARCHAR
 );
--- INSERT INTO users (id, firstName, lastName, password_digest)
--- VALUES (1, 'Spongebob', 'Squarepants', 'aerghsertbhsdrtnhsetrn'),
---        (1, 'Patrick', 'Star', 'aerghsertsdfgnhsetrn'),
---        (1, 'Sandy', 'Cheeks', 'aerghsguiklrtnhsetrn');
+INSERT INTO users (id, firstName, lastName, password_digest)
+VALUES (1, 'Spongebob', 'Squarepants', 'aerghsertbhsdrtnhsetrn'),
+       (2, 'Patrick', 'Star', 'aerghsertsdfgnhsetrn'),
+       (3, 'Sandy', 'Cheeks', 'aerghsguiklrtnhsetrn');

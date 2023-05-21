@@ -14,4 +14,5 @@ declare module 'db-migrate' {
     export declare function down(specification: string)
     export declare function up(specification: string)
     export declare function reset()
+    export declare function silence(silentMode: boolean)
 }
