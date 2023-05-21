@@ -4,17 +4,6 @@ import jwt, { Secret } from 'jsonwebtoken';
 import * as dbMigrate from 'db-migrate';
 import jwtDecode from 'jwt-decode';
 import { User } from '../../models/user';
-import bcrypt from 'bcrypt';
-
-if (process.env.SALT_ROUNDS === undefined) {
-  throw new Error('Missing environment variable: SALT_ROUNDS');
-}
-if (process.env.PEPPER === undefined) {
-  throw new Error('Missing environment variable: PEPPER');
-}
-
-const SALT_ROUNDS = process.env.SALT_ROUNDS as string;
-const PEPPER = process.env.PEPPER as string;
 
 // Generate a JWT for endpoints requiring authentication
 const TOKEN_SECRET: Secret = process.env.TOKEN_SECRET || '';
@@ -72,13 +61,8 @@ describe('GET /users', () => {
       firstName: 'Eugene',
       lastName: 'Krabs',
       password: 'money',
-      password_digest: ''
+      password_digest: '',
     };
-
-    const expected_password_digest = bcrypt.hashSync(
-      testUser.password + PEPPER,
-      parseInt(SALT_ROUNDS)
-    );
 
     const payload = {
       user: testUser,

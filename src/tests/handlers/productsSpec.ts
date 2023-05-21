@@ -16,7 +16,7 @@ const testUser = {
 const testToken = jwt.sign(testUser, TOKEN_SECRET);
 const request = supertest(app);
 
-describe('GET /products', () => {
+describe('Product endpoint tests', () => {
   // migrate the db down then up to set the database state
   beforeAll(async () => {
     // run the test db up migration
@@ -50,23 +50,6 @@ describe('GET /products', () => {
     const res = await request.get('/products/1');
     expect(res.status).toBe(200);
     expect(res.body).toEqual(testProduct);
-  });
-});
-
-describe('POST /products', () => {
-  // migrate the db down then up to set the database state
-  beforeAll(async () => {
-    // run the test db up migration
-    const dbm = dbMigrate.getInstance(true);
-    dbm.silence(true);
-    dbm.up();
-  });
-
-  afterAll(async () => {
-    // reset the db
-    const dbm = dbMigrate.getInstance(true);
-    dbm.silence(true);
-    dbm.reset();
   });
 
   it('should create a new product with the given input data', async () => {
