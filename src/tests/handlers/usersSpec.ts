@@ -34,14 +34,13 @@ describe('GET /users', () => {
   beforeAll(async () => {
     // run the test db up migration
     const dbm = dbMigrate.getInstance(true);
-    // dbm.silence(true);
+    dbm.silence(true);
     dbm.up();
   });
 
   afterAll(async () => {
     // reset the db
     const dbm = dbMigrate.getInstance(true);
-    // dbm.silence(true);
     dbm.reset();
   });
 
@@ -68,7 +67,6 @@ describe('GET /users', () => {
   });
 
   it('should create a new user with the given input data', async () => {
-    console.log('pre user CREATE spec')
     const testUser: User = {
       id: 4,
       firstName: 'Eugene',
@@ -96,6 +94,5 @@ describe('GET /users', () => {
     expect(decodedBody.user.id).toEqual(testUser.id);
     expect(decodedBody.user.firstName).toEqual(testUser.firstName);
     expect(decodedBody.user.lastName).toEqual(testUser.lastName);
-    //console.log('post user CREATE spec')
   });
 });
