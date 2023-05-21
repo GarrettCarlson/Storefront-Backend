@@ -1,3 +1,4 @@
+//@ts-ignore
 import client from '../database';
 
 export type Order = {
@@ -14,6 +15,7 @@ export class OrderStore {
       //@ts-ignore
       const sql =
         'INSERT INTO orders (id, user_id, status) VALUES($1, $2, $3) RETURNING *';
+      //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql, [o.id, o.user_id, o.status]);
       const order = result.rows[0];
@@ -28,6 +30,7 @@ export class OrderStore {
     try {
       //@ts-ignore
       const sql = 'SELECT * FROM orders';
+      //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql);
       const order = result.rows;
@@ -41,6 +44,7 @@ export class OrderStore {
     try {
       //@ts-ignore
       const sql = 'SELECT * FROM orders WHERE id=($1)';
+      //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       const order = result.rows[0];
@@ -54,6 +58,7 @@ export class OrderStore {
     try {
       //@ts-ignore
       const sql = 'SELECT * FROM orders WHERE user_id=($1)';
+      //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql, [user_id]);
       const order = result.rows;
@@ -69,6 +74,7 @@ export class OrderStore {
       //@ts-ignore
       const sql =
         'UPDATE orders SET (user_id, status) = ((SELECT id FROM users WHERE id = $2 LIMIT 1), $3) WHERE id=($1) AND EXISTS (SELECT 1 FROM users WHERE id=$2) RETURNING *';
+      //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql, [o.id, o.user_id, o.status]);
       const order = result.rows[0];
@@ -83,6 +89,7 @@ export class OrderStore {
     try {
       //@ts-ignore
       const sql = 'DELETE FROM orders WHERE id=($1)';
+      //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       const order = result.rows[0];

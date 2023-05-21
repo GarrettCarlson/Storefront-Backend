@@ -25,9 +25,13 @@ In order to connect to the database, begin a shell session in the Docker contain
 
 Then, in the Docker shell, change to the postgres user and connect to the database by running
 
-`su postgres & psql -U $POSTGRES_USER`
+`su postgres & psql -U dev_user -d storefront_backend -h localhost -p 5432`
 
 You should now be connected to the storefront_backend database, which is currently empty. Feel free to check by running `\dt` in the Docker terminal.
+
+Create the test db in the Docker terminal by running
+
+`CREATE DATABASE storefront_backend_test;`
 
 Migrate up the database by running `db-migrate up` from a new terminal set in the project root directory. Verify the migration was successful by going back to the Docker terminal and again running `\dt`.
 

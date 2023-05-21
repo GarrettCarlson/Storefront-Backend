@@ -1,3 +1,4 @@
+//@ts-ignore
 import client from '../database';
 
 export type Product = {
@@ -15,6 +16,7 @@ export class ProductStore {
       //@ts-ignore
       const sql =
         'INSERT INTO products (id, name, price, category) VALUES($1, $2, $3, $4) RETURNING *';
+      //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql, [p.id, p.name, p.price, p.category]);
       const product = result.rows[0];
@@ -29,6 +31,7 @@ export class ProductStore {
     try {
       //@ts-ignore
       const sql = 'SELECT * FROM products';
+      //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql);
       const product = result.rows;
@@ -42,6 +45,7 @@ export class ProductStore {
     try {
       //@ts-ignore
       const sql = 'SELECT * FROM products WHERE id=($1)';
+      //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       const product = result.rows[0];
@@ -57,6 +61,7 @@ export class ProductStore {
       //@ts-ignore
       const sql =
         'UPDATE products SET (name, price, category) = ROW($2, $3, $4) WHERE id=($1) RETURNING *';
+      //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql, [p.id, p.name, p.price, p.category]);
       const product = result.rows[0];
@@ -71,6 +76,7 @@ export class ProductStore {
     try {
       //@ts-ignore
       const sql = 'DELETE FROM products WHERE id=($1)';
+      //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       const product = result.rows[0];
