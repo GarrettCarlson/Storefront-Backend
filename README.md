@@ -33,10 +33,16 @@ Create the test db in the Docker terminal by running
 
 `CREATE DATABASE storefront_backend_test;`
 
-Migrate up the database by running `db-migrate up` from a new terminal set in the project root directory. Verify the migration was successful by going back to the Docker terminal and again running `\dt`.
+Migrate up the database by running `db-migrate up` from a new terminal set in the project root directory. Verify the migration was successful by going back to the Docker terminal and again running `\dt`. While you are there, run `\l` to confirm the test db has been created.
 
 # What Ports The Backend and Database are Running On
 Using the provided docker-compose.yml file, the PostgreSQL server will be running on port 5432. The storefront backend express app is configured to run on port 3000.
 
 # Package installation instructions
 Required packages can be installed simply by running `npm ci` in a terminal set in the project root directory.
+
+# Running the Project
+The server can be started by running `npm start`.
+
+# Testing the Project
+The test script can be run with `npm run test`.
