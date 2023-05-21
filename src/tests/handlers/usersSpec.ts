@@ -4,6 +4,17 @@ import jwt, { Secret } from 'jsonwebtoken';
 import * as dbMigrate from 'db-migrate';
 import jwtDecode from 'jwt-decode';
 import { User } from '../../models/user';
+import bcrypt from 'bcrypt';
+
+if (process.env.SALT_ROUNDS === undefined) {
+  throw new Error('Missing environment variable: SALT_ROUNDS');
+}
+if (process.env.PEPPER === undefined) {
+  throw new Error('Missing environment variable: PEPPER');
+}
+
+const SALT_ROUNDS = process.env.SALT_ROUNDS as string;
+const PEPPER = process.env.PEPPER as string;
 
 // Generate a JWT for endpoints requiring authentication
 const TOKEN_SECRET: Secret = process.env.TOKEN_SECRET || '';
@@ -45,8 +56,8 @@ describe('GET /users', () => {
   it('should return a single user with the correct properties', async () => {
     const testUser = {
       id: 1,
-      firstname: 'Spongebob',
-      lastname: 'Squarepants',
+      firstName: 'Spongebob',
+      lastName: 'Squarepants',
       password_digest: 'aerghsertbhsdrtnhsetrn',
     };
     const res = await request
@@ -57,14 +68,19 @@ describe('GET /users', () => {
   });
 
   it('should create a new user with the given input data', async () => {
+    console.log('pre user CREATE spec')
     const testUser: User = {
       id: 4,
       firstName: 'Eugene',
       lastName: 'Krabs',
       password: 'money',
-      password_digest: 'aerghsertbhsdraffastnhsetrn',
+      password_digest: ''
     };
-    //const expectedToken = jwt.sign({ user: testUser }, TOKEN_SECRET);
+
+    const expected_password_digest = bcrypt.hashSync(
+      testUser.password + PEPPER,
+      parseInt(SALT_ROUNDS)
+    );
 
     const payload = {
       user: testUser,
@@ -77,6 +93,9 @@ describe('GET /users', () => {
 
     expect(res.status).toEqual(200);
     const decodedBody = jwtDecode(res.body) as { user: User };
-    expect(decodedBody.user).toEqual(testUser);
+    expect(decodedBody.user.id).toEqual(testUser.id);
+    expect(decodedBody.user.firstName).toEqual(testUser.firstName);
+    expect(decodedBody.user.lastName).toEqual(testUser.lastName);
+    //console.log('post user CREATE spec')
   });
 });

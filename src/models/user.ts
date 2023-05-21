@@ -27,7 +27,7 @@ export class UserStore {
     try {
       //@ts-ignore
       const sql =
-        'INSERT INTO users (id, firstName, lastName, password_digest) VALUES($1, $2, $3, $4) RETURNING *';
+        'INSERT INTO users (id, "firstName", "lastName", password_digest) VALUES($1, $2, $3, $4) RETURNING *';
       const password_digest = bcrypt.hashSync(
         u.password + PEPPER,
         parseInt(SALT_ROUNDS)
@@ -81,7 +81,7 @@ export class UserStore {
     try {
       //@ts-ignore
       const sql =
-        'UPDATE users SET (firstName, lastName, password_digest) = ROW($2, $3, $4) WHERE id=($1) RETURNING *';
+        'UPDATE users SET ("firstName", "lastName", password_digest) = ROW($2, $3, $4) WHERE id=($1) RETURNING *';
       const password_digest = bcrypt.hashSync(
         u.password + PEPPER,
         parseInt(SALT_ROUNDS)
