@@ -6,12 +6,16 @@ First, setup the environment variables by creating a .env file in the project ro
 
 *.env*
 ```
-POSTGRES_USER = storefront_backend
+POSTGRES_HOST=127.0.0.1
+POSTGRES_USER = dev_user
 POSTGRES_PASSWORD = password123
+POSTGRES_DB = storefront_backend
+POSTGRES_TEST_DB = storefront_backend_test
 BCRYPT_PASSWORD = your-secret-password
 SALT_ROUNDS = 10
 PEPPER = 469532
 TOKEN_SECRET = udacity
+ENV = test
 ```
 
 Run the included docker-compose.yml in order to set up the PostgreSQL server by running
