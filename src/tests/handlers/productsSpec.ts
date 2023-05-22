@@ -18,19 +18,19 @@ const request = supertest(app);
 
 describe('Product endpoint tests', () => {
   // migrate the db down then up to set the database state
-  beforeAll(async () => {
-    // run the test db up migration
-    const dbm = dbMigrate.getInstance(true);
-    dbm.silence(true);
-    dbm.up();
-  });
+  // beforeEach(async () => {
+  //   // run the test db up migration
+  //   const dbm = await dbMigrate.getInstance(true);
+  //   await dbm.silence(true);
+  //   await dbm.up();
+  // });
 
-  afterAll(async () => {
-    // reset the db
-    const dbm = dbMigrate.getInstance(true);
-    dbm.silence(true);
-    dbm.reset();
-  });
+  // afterEach(async () => {
+  //   // reset the db
+  //   const dbm = await dbMigrate.getInstance(true);
+  //   await dbm.silence(true);
+  //   await dbm.reset();
+  // });
 
   it('should return all products', (done: DoneFn) => {
     request.get('/products').end((err, res) => {

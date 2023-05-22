@@ -18,21 +18,7 @@ const testUser = {
 const testToken = jwt.sign(testUser, TOKEN_SECRET);
 const request = supertest(app);
 
-describe('GET /users', () => {
-  // migrate the db down then up to set the database state
-  beforeAll(async () => {
-    // run the test db up migration
-    const dbm = dbMigrate.getInstance(true);
-    dbm.silence(true);
-    dbm.up();
-  });
-
-  afterAll(async () => {
-    // reset the db
-    const dbm = dbMigrate.getInstance(true);
-    dbm.reset();
-  });
-
+describe('User endpoint tests', () => {
   it('should return all users', async () => {
     const res = await request
       .get('/users')
