@@ -8,17 +8,14 @@ These are the notes from a meeting with the frontend developer that describe wha
 GET /products - Index
 GET /products/:product_id - Show
 POST /products - Create [token required]
-- [OPTIONAL] Top 5 most popular products
-- [OPTIONAL] Products by category (args: product category)
 
 #### Users
 GET /users - Index [token required]
 GET /users/:user_id - Show [token required]
-POST /users - Create N[token required]
+POST /users - Create [token required]
 
 #### Orders
 GET /orders/:user_id - Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
 
 ## Data Shapes
 #### Product
@@ -26,12 +23,8 @@ GET /orders/:user_id - Current Order by user (args: user id)[token required]
 | ----------- | --------- | ----------- |
 | id          | serial    | PRIMARY KEY |
 | name        | varchar   |             |
-| price       | numeric   |             |
+| price       | real      |             |
 | category    | varchar   |             |
-- id
-- name
-- price
-- [OPTIONAL] category
 
 #### User
 | Column Name    | Data Type | Constraints |
@@ -40,20 +33,13 @@ GET /orders/:user_id - Current Order by user (args: user id)[token required]
 | firstName      | varchar   |             |
 | lastName       | numeric   |             |
 | password_digest| varchar   |             |
-- id
-- firstName
-- lastName
-- password
 
 #### Orders
 | Column Name | Data Type | Constraints           |
 | ----------- | --------- | --------------------- |
 | id          | serial    | PRIMARY KEY           |
-| user_id     | varchar   | FOREIGN KEY users(id) |
+| user_id     | integer   | FOREIGN KEY users(id) |
 | status      | varchar   |                       |
-- id
-- user_id
-- status of order (active or complete)
 
 #### Order Products
 | Column Name | Data Type | Constraints              |
@@ -62,5 +48,3 @@ GET /orders/:user_id - Current Order by user (args: user id)[token required]
 | order_id    | bigint    | FOREIGN KEY orders(id)   |
 | product_id  | bigint    | FOREIGN KEY products(id) |
 | quantity    | integer   |                          |
-- id of each product in the order
-- quantity of each product in the order
