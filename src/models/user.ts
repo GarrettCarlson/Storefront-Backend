@@ -13,7 +13,7 @@ const SALT_ROUNDS = process.env.SALT_ROUNDS as string;
 const PEPPER = process.env.PEPPER as string;
 
 export type User = {
-  id: Number;
+  id: number;
   firstName: string;
   lastName: string;
   password: string;
@@ -105,7 +105,7 @@ export class UserStore {
   async delete(id: string): Promise<User> {
     try {
       //@ts-ignore
-      const sql = 'DELETE FROM users WHERE id=($1)';
+      const sql = 'DELETE FROM users WHERE id=($1) RETURNING *';
       //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);

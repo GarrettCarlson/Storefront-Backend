@@ -1,16 +1,13 @@
 import supertest from 'supertest';
 import app from '../../server';
 import jwt, { Secret } from 'jsonwebtoken';
-import * as dbMigrate from 'db-migrate';
-import jwtDecode from 'jwt-decode';
-import { User } from '../../models/user';
 
 // Generate a JWT for endpoints requiring authentication
 const TOKEN_SECRET: Secret = process.env.TOKEN_SECRET || '';
 const testUser = {
-  id: '666',
-  firstName: 'Lucifer',
-  lastName: 'the Magnanimous',
+  id: '777',
+  firstName: 'King',
+  lastName: 'Neptune',
   password_digest:
     'gaeorigjeorigjsroitgjoairjgoiaqwjrogijaerlotibghjsertrgasd...sdf.gs54587656',
 };
@@ -19,20 +16,6 @@ const testToken = jwt.sign(testUser, TOKEN_SECRET);
 const request = supertest(app);
 
 describe('Order endpoint tests', () => {
-  // migrate the db down then up to set the database state
-  beforeAll(async () => {
-    // run the test db up migration
-    const dbm = dbMigrate.getInstance(true);
-    dbm.silence(true);
-    dbm.up();
-  });
-
-  afterAll(async () => {
-    // reset the db
-    const dbm = dbMigrate.getInstance(true);
-    dbm.reset();
-  });
-
   it('should return all orders for a given user_id', async () => {
     const orders = {
       order1: { id: 1, user_id: 1, status: 'pending' },

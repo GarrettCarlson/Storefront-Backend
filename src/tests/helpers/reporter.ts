@@ -3,10 +3,11 @@ import {
   SpecReporter,
   StacktraceOption,
 } from 'jasmine-spec-reporter';
+import SuiteInfo = jasmine.SuiteInfo;
 
 class CustomProcessor extends DisplayProcessor {
-  public displaySuccessfulSpec(spec: any, log: string): string {
-    return log;
+  public displayJasmineStarted(info: SuiteInfo, log: string): string {
+    return `TypeScript ${log}`;
   }
 }
 

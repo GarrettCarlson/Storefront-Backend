@@ -8,11 +8,3 @@ declare module "*.json" {
     };
     export default value;
   }
-
-declare module 'db-migrate' {
-    export declare function getInstance(isModule: boolean)
-    export declare function down(specification: string)
-    export declare function up(specification: string)
-    export declare function reset()
-    export declare function silence(silentMode: boolean)
-}

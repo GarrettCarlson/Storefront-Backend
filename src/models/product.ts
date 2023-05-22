@@ -2,9 +2,9 @@
 import client from '../database';
 
 export type Product = {
-  id: Number;
+  id: number;
   name: string;
-  price: Number;
+  price: number;
   category: string;
 };
 
@@ -75,7 +75,7 @@ export class ProductStore {
   async delete(id: string): Promise<Product> {
     try {
       //@ts-ignore
-      const sql = 'DELETE FROM products WHERE id=($1)';
+      const sql = 'DELETE FROM products WHERE id=($1) RETURNING *';
       //@ts-ignore
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);

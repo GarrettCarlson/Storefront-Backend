@@ -79,6 +79,20 @@ const update = async (req: Request, res: Response) => {
   }
 };
 
+const addProduct = async (req: Request, res: Response) => {
+  const orderId = req.params.id;
+  const productId = req.body.productId;
+  const quantity: number = parseInt(req.body.quantity);
+
+  try {
+    const addedProduct = await store.addProduct(orderId, productId, quantity);
+    res.json(addedProduct);
+  } catch (err) {
+    res.status(400);
+    res.json(`Error updating order ${req.body.order}: ${err}`);
+  }
+};
+
 // Delete - REQUIRES TOKEN
 const remove = async (req: Request, res: Response) => {
   try {
@@ -98,6 +112,7 @@ const order_routes = (app: express.Application) => {
   // app.put('/orders/:id', verifyAuthToken, update);
   // app.delete('/orders/:id', verifyAuthToken, remove);
   app.get('/orders/:user_id', verifyAuthToken, showbyUserId);
+  app.post('/orders/:id/products', verifyAuthToken, addProduct);
 };
 
 export default order_routes;
