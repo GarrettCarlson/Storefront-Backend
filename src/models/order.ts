@@ -2,9 +2,16 @@
 import client from '../database';
 
 export type Order = {
-  id: Number;
-  user_id: Number;
+  id: number;
+  user_id: number;
   status: string;
+};
+
+export type OrderProduct = {
+  id: number;
+  order_id: number;
+  product_id: number;
+  quantity: number;
 };
 
 export class OrderStore {
@@ -81,7 +88,26 @@ export class OrderStore {
       conn.release();
       return order;
     } catch (err) {
-      throw new Error(`Could not update order ${o.user_id}. Error: ${err}.`);
+      throw new Error(`Could not update order ${o.id}. Error: ${err}.`);
+    }
+  }
+  async addProduct(
+    orderId: string,
+    productId: string,
+    quantity: number
+  ): Promise<OrderProduct> {
+    try {
+      //@ts-ignore
+      const sql =
+        'INSERT INTO order_products (order_id, product_id, quantity) VALUES($1, $2, $3) RETURNING *';
+      //@ts-ignore
+      const conn = await client.connect();
+      const result = await conn.query(sql, [orderId, productId, quantity]);
+      const orderProduct = result.rows[0];
+      conn.release();
+      return orderProduct;
+    } catch (err) {
+      throw new Error(`Could not update order ${orderId}. Error: ${err}.`);
     }
   }
   // DELETE

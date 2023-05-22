@@ -5,6 +5,6 @@ CREATE TABLE products (
     category VARCHAR(100)
 );
 INSERT INTO products (id, name, price, category)
-VALUES (1, 'Product_1', 1.1, 'General'),
-       (2, 'Product_2', 2.1, 'General'),
-       (3, 'Product_3', 3.1, 'General');
+VALUES (1, 'Jellyfishing Net', 1.1, 'Sporting Goods'),
+       (2, '#1 Hat', 2.1, 'Apparel'),
+       (3, 'Secret Formula', 3.1, 'Food');

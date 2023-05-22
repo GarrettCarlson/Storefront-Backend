@@ -13,7 +13,7 @@ const SALT_ROUNDS = process.env.SALT_ROUNDS as string;
 const PEPPER = process.env.PEPPER as string;
 
 export type User = {
-  id: Number;
+  id: number;
   firstName: string;
   lastName: string;
   password: string;
